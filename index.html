@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EcoSphere is a dynamic carbon footprint awareness and tracking platform designed to help you understand, track, and reduce your greenhouse emissions through customized persona tracks and context-aware coaching." />
+    <title>EcoSphere | Persona Carbon Tracker & AI Coach</title>
+    <!-- Modern web font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <!-- 1. ONBOARDING SCREEN -->
+      <section id="onboarding-screen" class="onboarding-container" aria-label="EcoSphere Onboarding">
+        <div class="onboarding-card animate-fade-in">
+          <header class="onboarding-header">
+            <span class="logo-emoji">🌱</span>
+            <h1>Welcome to EcoSphere</h1>
+            <p>Empowering you to understand, track, and reduce your carbon footprint through tailored action tracks.</p>
+          </header>
+
+          <main class="onboarding-body">
+            <h2>Select your Carbon Vertical Track:</h2>
+            <p class="section-help-text">Choose the persona that aligns best with your lifestyle. EcoSphere will customize your tracker, challenges, and coaching tips based on this selection.</p>
+
+            <div class="persona-deck" role="radiogroup" id="persona-selector" aria-label="Vertical tracks selection">
+              <!-- Commuter Card -->
+              <div class="persona-card selected" role="radio" aria-checked="true" data-persona="commuter" tabindex="0">
+                <span class="persona-icon" aria-hidden="true">🚗</span>
+                <div class="persona-info">
+                  <h3>Urban Commuter</h3>
+                  <p>For city dwellers, frequent flyers, and daily drivers. Focuses on switching to EVs, public transit, and micro-mobility swaps.</p>
+                </div>
+              </div>
+
+              <!-- Foodie Card -->
+              <div class="persona-card" role="radio" aria-checked="false" data-persona="foodie" tabindex="0">
+                <span class="persona-icon" aria-hidden="true">🥗</span>
+                <div class="persona-info">
+                  <h3>Conscious Foodie</h3>
+                  <p>For culinary lovers and grocery shoppers. Focuses on animal protein footprint, food waste, local sourcing, and packaging.</p>
+                </div>
+              </div>
+
+              <!-- Home Optimizer Card -->
+              <div class="persona-card" role="radio" aria-checked="false" data-persona="home" tabindex="0">
+                <span class="persona-icon" aria-hidden="true">⚡</span>
+                <div class="persona-info">
+                  <h3>Smart Home Optimizer</h3>
+                  <p>For tenants and homeowners. Focuses on appliances, smart plugs, electricity sourcing, heating insulation, and utility savings.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Question Form (populated by ui.js) -->
+            <form id="onboarding-form" class="onboarding-form-details">
+              <div id="onboarding-questions">
+                <!-- Javascript will render specific questions for default 'commuter' here -->
+              </div>
+            </form>
+          </main>
+        </div>
+      </section>
+
+      <!-- 2. MAIN APPLICATION WORKSPACE -->
+      <div id="main-screen" class="main-layout" style="display: none;">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+          <div class="sidebar-header">
+            <span class="brand-logo">🌱 EcoSphere</span>
+          </div>
+
+          <!-- User Progress/Gamification Dashboard Widget -->
+          <div class="user-profile-widget" aria-label="User progression tracker">
+            <div class="profile-stats">
+              <span id="header-level" class="level-badge">Lvl 1</span>
+              <span id="header-xp" class="xp-val">100 XP</span>
+            </div>
+            <div class="progress-container" aria-hidden="true">
+              <div id="xp-progress-bar" class="progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="rewards-summary">
+              <span class="label">Carbon Saved:</span>
+              <span id="header-saved" class="saved-val">0.0 kg</span>
+            </div>
+          </div>
+
+          <!-- Navigation Links -->
+          <ul class="nav-menu" role="tablist">
+            <li class="nav-item">
+              <a href="#" class="nav-link active" data-tab="dashboard" role="tab" aria-selected="true" id="tab-dash">
+                <span class="nav-icon">📊</span> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-tab="tracker" role="tab" aria-selected="false" id="tab-track">
+                <span class="nav-icon">✏️</span> Track Activity
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-tab="logs" role="tab" aria-selected="false" id="tab-logs">
+                <span class="nav-icon">🕒</span> Carbon Logs
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-tab="challenges" role="tab" aria-selected="false" id="tab-challenges">
+                <span class="nav-icon">🏆</span> Challenges
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-tab="chat" role="tab" aria-selected="false" id="tab-chat">
+                <span class="nav-icon">💬</span> EcoBuddy Coach
+              </a>
+            </li>
+          </ul>
+
+          <!-- Sidebar Footer Utilities -->
+          <div class="sidebar-footer">
+            <button id="theme-toggle" class="btn btn-secondary btn-full">🌙 Dark Mode</button>
+            <button id="reset-btn" class="btn btn-danger btn-full">🗑️ Reset Platform</button>
+          </div>
+        </nav>
+
+        <!-- Right Content Workspace -->
+        <main class="content-workspace">
+          <!-- DASHBOARD TAB -->
+          <section class="tab-panel active" id="dashboard-tab" role="tabpanel" aria-labelledby="tab-dash">
+            <header class="section-header">
+              <div>
+                <span class="vertical-pill">Active Track</span>
+                <h2 class="vertical-title"><span id="dash-persona-icon">🚗</span> <span id="dash-persona-title">Urban Commuter</span></h2>
+              </div>
+            </header>
+
+            <div class="grid grid-3">
+              <div class="stat-card">
+                <h3>Annual Target Baseline</h3>
+                <p id="dash-baseline-total" class="stat-value">0.0 Tons</p>
+                <span class="stat-meta">Set during onboarding</span>
+              </div>
+              <div class="stat-card">
+                <h3>Weekly Tracked Carbon</h3>
+                <p id="dash-tracked-total" class="stat-value">0.0 kg</p>
+                <span class="stat-meta">From log entries</span>
+              </div>
+              <div class="stat-card">
+                <h3>Carbon Saved (CO₂e)</h3>
+                <p id="dash-saved-total" class="stat-value">0.0 kg</p>
+                <span class="stat-meta">From habits/challenges</span>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="margin-top: 1.5rem;">
+              <div class="card chart-card">
+                <h3>Carbon Breakdown by Category</h3>
+                <div id="chart-container" class="chart-wrapper">
+                  <!-- Native high-contrast SVG Donut Chart dynamically rendered here -->
+                </div>
+              </div>
+              <div class="card tips-card">
+                <h3>Coaching Recommendations</h3>
+                <ul id="dashboard-tips" class="tips-list">
+                  <!-- Dynamically populated from persona recommendations -->
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- TRACK ACTIVITY TAB -->
+          <section class="tab-panel" id="tracker-tab" role="tabpanel" aria-labelledby="tab-track" style="display: none;">
+            <header class="section-header">
+              <h2>Track Daily Activity</h2>
+              <p>Log your daily activities to calculate and index your exact carbon emissions footprint.</p>
+            </header>
+
+            <div class="card form-card">
+              <form id="tracker-form" class="styled-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="tracker-category">Activity Category</label>
+                    <select id="tracker-category" name="category">
+                      <option value="transport" selected>🚗 Transport & Travel</option>
+                      <option value="diet">🥗 Food & Diet</option>
+                      <option value="energy">⚡ Residential Energy</option>
+                      <option value="shopping">🛍️ Shopping & Consumption</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tracker-type">Activity Subcategory</label>
+                    <select id="tracker-type" name="type">
+                      <!-- Subcategories rendered dynamically via JS -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label id="tracker-amount-label" for="tracker-amount">Distance / Value</label>
+                    <div class="input-unit-wrapper">
+                      <input type="number" id="tracker-amount" name="amount" min="0.1" step="any" required>
+                      <span id="tracker-amount-unit" class="input-unit">km</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tracker-note">Optional Details</label>
+                    <input type="text" id="tracker-note" name="note" placeholder="e.g. Morning commute to office">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Log Activity (+10 XP)</button>
+              </form>
+            </div>
+          </section>
+
+          <!-- CARBON LOGS TAB -->
+          <section class="tab-panel" id="logs-tab" role="tabpanel" aria-labelledby="tab-logs" style="display: none;">
+            <header class="section-header">
+              <h2>Carbon Activity Logs</h2>
+              <p>Review, analyze, and manage your tracked carbon log entries.</p>
+            </header>
+
+            <div class="card table-card">
+              <div class="table-responsive">
+                <table class="logs-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date & Time</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Details</th>
+                      <th scope="col">Carbon Cost (CO₂e)</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logs-table-body">
+                    <!-- Log entries rendered dynamically here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- CHALLENGES TAB -->
+          <section class="tab-panel" id="challenges-tab" role="tabpanel" aria-labelledby="tab-challenges" style="display: none;">
+            <header class="section-header">
+              <h2>Daily Challenges & Habits</h2>
+              <p>Practice green habits to offset your carbon cost and earn XP ranks.</p>
+            </header>
+
+            <div id="challenges-grid" class="grid grid-2">
+              <!-- Challenge cards rendered dynamically here -->
+            </div>
+          </section>
+
+          <!-- CHAT COACH TAB -->
+          <section class="tab-panel" id="chat-tab" role="tabpanel" aria-labelledby="tab-chat" style="display: none;">
+            <header class="section-header">
+              <h2>EcoBuddy Carbon Coach</h2>
+              <p>Your interactive sustainability advisor. Get carbon estimates, check tips, or review stats.</p>
+            </header>
+
+            <div class="chat-container-card">
+              <div id="chat-messages" class="chat-logs" role="log" aria-live="polite" aria-label="Conversation logs">
+                <!-- Chat messages rendered dynamically here -->
+              </div>
+              <form id="chat-form" class="chat-input-form">
+                <input type="text" id="chat-input" placeholder="Ask EcoBuddy about EV footprint, diet, home saving tips..." required aria-label="Chat input message">
+                <button type="submit" id="chat-send-btn" class="btn btn-primary">Send</button>
+              </form>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
