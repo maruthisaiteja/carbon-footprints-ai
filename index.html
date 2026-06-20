@@ -263,6 +263,23 @@
               <p>Your interactive sustainability advisor. Get carbon estimates, check tips, or review stats.</p>
             </header>
 
+            <!-- Google Gemini API Key Setup -->
+            <div class="gemini-setup-card card" style="margin-bottom: 1rem; padding: 1rem;">
+              <form id="gemini-config-form" style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column; gap: 0.25rem; flex-grow: 1; min-width: 250px;">
+                  <label for="gemini-key-input" style="font-size: 0.8rem; font-weight:600;">🔐 Connect Google Gemini API (Optional)</label>
+                  <input type="password" id="gemini-key-input" placeholder="Enter AIzaSy... API Key" style="padding: 0.5rem; font-size:0.85rem;" aria-label="Gemini API Key">
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                  <button type="submit" id="gemini-save-btn" class="btn btn-action" style="padding: 0.5rem 1rem;">Connect</button>
+                  <button type="button" id="gemini-clear-btn" class="btn btn-delete" style="display: none; padding: 0.5rem 1rem;">Disconnect</button>
+                </div>
+              </form>
+              <p id="gemini-status-text" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                Running on **Local Rules Engine** (Offline). Connect a key to unlock real-time Gemini AI coaching.
+              </p>
+            </div>
+
             <div class="chat-container-card">
               <div id="chat-messages" class="chat-logs" role="log" aria-live="polite" aria-label="Conversation logs">
                 <!-- Chat messages rendered dynamically here -->

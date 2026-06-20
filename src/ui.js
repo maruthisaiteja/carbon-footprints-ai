@@ -2,6 +2,7 @@ import { stateManager } from './state.js';
 import { PERSONAS } from './persona.js';
 import { EMISSION_FACTORS } from './calculations.js';
 import { getAssistantResponse } from './assistant.js';
+import { queryGeminiAssistant, getGeminiApiKey, saveGeminiApiKey, clearGeminiApiKey } from './gemini.js';
 
 class UIManager {
   constructor() {
@@ -83,6 +84,13 @@ class UIManager {
     this.chatForm = document.getElementById('chat-form');
     this.chatInput = document.getElementById('chat-input');
     this.chatSendBtn = document.getElementById('chat-send-btn');
+    
+    // Gemini Settings Elements
+    this.geminiConfigForm = document.getElementById('gemini-config-form');
+    this.geminiKeyInput = document.getElementById('gemini-key-input');
+    this.geminiSaveBtn = document.getElementById('gemini-save-btn');
+    this.geminiClearBtn = document.getElementById('gemini-clear-btn');
+    this.geminiStatusText = document.getElementById('gemini-status-text');
   }
 
   /**
@@ -221,11 +229,44 @@ class UIManager {
         chatContainer.appendChild(typingIndicator);
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        setTimeout(() => {
+        setTimeout(async () => {
           typingIndicator.remove();
-          const aiResponse = getAssistantResponse(msg, stateManager.state);
+          
+          // Try to query Google Gemini API
+          let aiResponse = await queryGeminiAssistant(msg, stateManager.state);
+          
+          // Graceful fallback to offline local rules-based engine
+          if (!aiResponse) {
+            aiResponse = getAssistantResponse(msg, stateManager.state);
+          }
+          
           stateManager.addChatMessage('ai', aiResponse);
         }, 600);
+      });
+    }
+
+    // Gemini API Key Config Form Listeners
+    if (this.geminiConfigForm) {
+      this.geminiConfigForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const key = this.geminiKeyInput.value.trim();
+        if (!key) return;
+
+        const success = saveGeminiApiKey(key);
+        if (success) {
+          alert('Google Gemini API connected successfully! EcoBuddy is now powered by Gemini AI.');
+          this.renderGeminiStatus();
+        } else {
+          alert('Invalid key. Google Gemini API keys must start with "AIzaSy".');
+        }
+      });
+    }
+
+    if (this.geminiClearBtn) {
+      this.geminiClearBtn.addEventListener('click', () => {
+        clearGeminiApiKey();
+        alert('Google Gemini API disconnected. Reverting to local rules engine.');
+        this.renderGeminiStatus();
       });
     }
   }
@@ -412,17 +453,43 @@ class UIManager {
       progressBar.style.width = `${xpPercent}%`;
     }
 
-    // 4. Render Dashboard Tab
+    // 4. Render Gemini Status Panel
+    this.renderGeminiStatus();
+
+    // 5. Render Dashboard Tab
     this.renderDashboard(state);
 
-    // 5. Render Logs Table
+    // 6. Render Logs Table
     this.renderLogs(state);
 
-    // 6. Render Challenges Grid
+    // 7. Render Challenges Grid
     this.renderChallenges(state);
 
-    // 7. Render Chat History
+    // 8. Render Chat History
     this.renderChat(state);
+  }
+
+  /**
+   * Updates the visual state of the Gemini configuration form in the Coach view.
+   */
+  renderGeminiStatus() {
+    if (!this.geminiKeyInput) return;
+    
+    const apiKey = getGeminiApiKey();
+    if (apiKey) {
+      this.geminiKeyInput.value = '••••••••••••••••••••••••••••••••••••';
+      this.geminiKeyInput.disabled = true;
+      this.geminiSaveBtn.style.display = 'none';
+      this.geminiClearBtn.style.display = 'inline-flex';
+      this.geminiStatusText.innerHTML = '⚡ Connected to **Google Gemini API** (gemini-2.5-flash). EcoBuddy is fully customized.';
+      this.geminiStatusText.style.color = 'var(--primary-color)';
+    } else {
+      this.geminiKeyInput.disabled = false;
+      this.geminiSaveBtn.style.display = 'inline-flex';
+      this.geminiClearBtn.style.display = 'none';
+      this.geminiStatusText.innerHTML = 'Running on **Local Rules Engine** (Offline). Connect a key to unlock real-time Gemini AI coaching.';
+      this.geminiStatusText.style.color = 'var(--text-secondary)';
+    }
   }
 
   /**

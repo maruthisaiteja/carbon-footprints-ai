@@ -104,4 +104,20 @@ describe('Carbon Footprint Calculations', () => {
     // Total should equal sum of categories (using unrounded figures before rounding)
     expect(baseline.total).toBe(4.8);
   });
+
+  test('calculations handle edge cases, float values, and extreme inputs', () => {
+    // Negative inputs must return 0
+    expect(calculateTransportEmissions('petrolCar', -100)).toBe(0);
+    expect(calculateDietEmissions('vegan', -20)).toBe(0);
+    expect(calculateEnergyEmissions('gridElectricity', -500)).toBe(0);
+    expect(calculateShoppingEmissions('clothing', -5)).toBe(0);
+
+    // Floating point values must be computed precisely
+    expect(calculateTransportEmissions('petrolCar', 12.345)).toBe(2.099); // 12.345 * 0.170 = 2.09865 -> 2.099
+    expect(calculateDietEmissions('vegan', 2.5)).toBe(1.25);
+    expect(calculateEnergyEmissions('gridElectricity', 15.75)).toBe(5.985); // 15.75 * 0.380 = 5.985
+
+    // Extreme massive values must not trigger infinity or NaNs
+    expect(calculateTransportEmissions('petrolCar', 999999999)).toBe(169999999.83);
+  });
 });

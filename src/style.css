@@ -5,23 +5,23 @@
 
 /* --- CSS VARIABLES (LIGHT THEME DEFAULT) --- */
 :root {
-  --primary-color: #10b981;      /* Emerald Green */
-  --primary-hover: #059669;      /* Deep Emerald */
+  --primary-color: #059669;      /* Darker Emerald Green for WCAG contrast */
+  --primary-hover: #047857;      /* Deep Emerald */
   --primary-light: #d1fae5;      /* Soft Emerald tint */
-  --secondary-color: #3b82f6;    /* Electric Blue */
-  --accent-color: #f59e0b;       /* Warm Amber */
-  --danger-color: #ef4444;       /* Coral Red */
+  --secondary-color: #2563eb;    /* Electric Blue (contrast-optimized) */
+  --accent-color: #d97706;       /* Warm Amber (contrast-optimized) */
+  --danger-color: #dc2626;       /* Coral Red */
   
   --bg-primary: #f8fafc;         /* Light grey canvas */
   --bg-secondary: #ffffff;       /* Pure white panels */
   --bg-sidebar: #0f172a;         /* Deep slate sidebar */
   
   --text-primary: #0f172a;       /* Dark slate text */
-  --text-secondary: #475569;     /* Charcoal grey */
-  --text-light: #94a3b8;         /* Light slate text */
+  --text-secondary: #334155;     /* Slate grey (darker for contrast) */
+  --text-light: #64748b;         /* Muted grey */
   --text-on-dark: #f8fafc;
   
-  --border-color: #e2e8f0;       /* Soft grey border */
+  --border-color: #cbd5e1;       /* Gray border (darker for focus borders) */
   --border-radius-sm: 8px;
   --border-radius-md: 14px;
   --border-radius-lg: 24px;
@@ -37,20 +37,26 @@
 
 /* --- DARK THEME OVERRIDES --- */
 body.dark-theme {
+  --primary-color: #34d399;      /* Lighter Emerald Green for dark mode contrast */
+  --primary-hover: #10b981;      /* Emerald Green */
+  --primary-light: #064e3b;      /* Dark green background tint */
+  --secondary-color: #60a5fa;    /* Light Blue */
+  --accent-color: #fbbf24;       /* Amber */
+  --danger-color: #f87171;       /* Light red */
+  
   --bg-primary: #0b0f19;         /* Very dark slate canvas */
   --bg-secondary: #131c2e;       /* Deep navy panels */
   --bg-sidebar: #070a12;         /* Darkest slate sidebar */
   
   --text-primary: #f8fafc;       /* Light grey/white text */
-  --text-secondary: #94a3b8;     /* Slate grey */
-  --text-light: #64748b;         /* Muted grey */
+  --text-secondary: #cbd5e1;     /* Slate grey */
+  --text-light: #94a3b8;         /* Muted grey */
   
   --border-color: #1e293b;       /* Dark border */
   
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.15);
   --shadow-md: 0 8px 16px rgba(0,0,0,0.25);
   --shadow-lg: 0 20px 24px -4px rgba(0,0,0,0.3);
-  --primary-light: #064e3b;
 }
 
 /* --- BASE STYLES --- */
@@ -852,3 +858,22 @@ body.dark-theme .co2-tag {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- GEMINI CONFIG CARD STYLING --- */
+.gemini-setup-card {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--secondary-color) !important;
+  transition: all var(--transition-normal);
+}
+body.dark-theme .gemini-setup-card {
+  border-left: 4px solid var(--secondary-color) !important;
+}
+.gemini-setup-card label {
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
