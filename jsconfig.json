@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

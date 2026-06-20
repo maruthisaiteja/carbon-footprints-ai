@@ -91,6 +91,11 @@ class UIManager {
     this.geminiSaveBtn = document.getElementById('gemini-save-btn');
     this.geminiClearBtn = document.getElementById('gemini-clear-btn');
     this.geminiStatusText = document.getElementById('gemini-status-text');
+
+    // Global Target Alignment Elements
+    this.alignmentStatusText = document.getElementById('alignment-status-text');
+    this.alignmentPctText = document.getElementById('alignment-pct-text');
+    this.alignmentProgressFill = document.getElementById('alignment-progress-fill');
   }
 
   /**
@@ -503,11 +508,30 @@ class UIManager {
     this.dashPersonaTitle.textContent = persona.title;
     
     // Update Metrics
-    this.dashBaselineTotal.textContent = `${state.baselineFootprint.total} Tons`;
+    const baseline = state.baselineFootprint.total;
+    this.dashBaselineTotal.textContent = `${baseline} Tons`;
     
     const trackedSumKg = stateManager.getTotalTrackedEmissions();
     this.dashTrackedTotal.textContent = `${trackedSumKg.toFixed(1)} kg`;
     this.dashSavedTotal.textContent = `${state.totalSavedCo2.toFixed(1)} kg`;
+
+    // Render Global Target Alignment
+    if (this.alignmentStatusText && this.alignmentProgressFill) {
+      const limit = 2.0;
+      const pctOfSix = Math.min((baseline / 6.0) * 100, 100);
+      
+      this.alignmentProgressFill.style.width = `${pctOfSix}%`;
+      
+      if (baseline <= limit) {
+        this.alignmentStatusText.innerHTML = `Your baseline is **${baseline} Tons/year** — which is **${(limit - baseline).toFixed(2)} Tons below** the IPCC 1.5°C limit! 🎉`;
+        this.alignmentProgressFill.style.backgroundColor = "var(--primary-color)";
+      } else {
+        this.alignmentStatusText.innerHTML = `Your baseline is **${baseline} Tons/year** — which is **${(baseline - limit).toFixed(2)} Tons above** the IPCC 1.5°C limit. Consider green transit or diet shifts.`;
+        this.alignmentProgressFill.style.backgroundColor = "var(--danger-color)";
+      }
+      
+      this.alignmentPctText.textContent = `${Math.round((baseline / limit) * 100)}% of Limit`;
+    }
 
     // Render Charts
     this.renderCharts(state);
@@ -680,8 +704,14 @@ class UIManager {
       const dateStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
       // Format Category Emoji & Text
-      const catIcons = { transport: '🚗', diet: '🥗', energy: '⚡', shopping: '🛍️', challenge: '🌱' };
-      const displayCat = `${catIcons[log.category] || '❓'} ${log.category.toUpperCase()}`;
+      const catIcons = {
+        transport: '<span role="img" aria-label="Transport">🚗</span>',
+        diet: '<span role="img" aria-label="Diet">🥗</span>',
+        energy: '<span role="img" aria-label="Energy">⚡</span>',
+        shopping: '<span role="img" aria-label="Shopping">🛍️</span>',
+        challenge: '<span role="img" aria-label="Challenge">🌱</span>'
+      };
+      const displayCat = `${catIcons[log.category] || '<span role="img" aria-label="Unknown">❓</span>'} ${log.category.toUpperCase()}`;
 
       // Format Details
       let details = log.note;

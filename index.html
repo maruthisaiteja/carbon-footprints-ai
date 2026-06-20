@@ -17,7 +17,7 @@
       <section id="onboarding-screen" class="onboarding-container" aria-label="EcoSphere Onboarding">
         <div class="onboarding-card animate-fade-in">
           <header class="onboarding-header">
-            <span class="logo-emoji">🌱</span>
+            <span class="logo-emoji" role="img" aria-label="Seedling">🌱</span>
             <h1>Welcome to EcoSphere</h1>
             <p>Empowering you to understand, track, and reduce your carbon footprint through tailored action tracks.</p>
           </header>
@@ -70,7 +70,7 @@
         <!-- Left Sidebar Navigation -->
         <nav class="sidebar" aria-label="Main Navigation">
           <div class="sidebar-header">
-            <span class="brand-logo">🌱 EcoSphere</span>
+            <span class="brand-logo"><span role="img" aria-label="Seedling">🌱</span> EcoSphere</span>
           </div>
 
           <!-- User Progress/Gamification Dashboard Widget -->
@@ -92,35 +92,35 @@
           <ul class="nav-menu" role="tablist">
             <li class="nav-item">
               <a href="#" class="nav-link active" data-tab="dashboard" role="tab" aria-selected="true" id="tab-dash">
-                <span class="nav-icon">📊</span> Dashboard
+                <span class="nav-icon" role="img" aria-label="Chart">📊</span> Dashboard
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link" data-tab="tracker" role="tab" aria-selected="false" id="tab-track">
-                <span class="nav-icon">✏️</span> Track Activity
+                <span class="nav-icon" role="img" aria-label="Pencil">✏️</span> Track Activity
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link" data-tab="logs" role="tab" aria-selected="false" id="tab-logs">
-                <span class="nav-icon">🕒</span> Carbon Logs
+                <span class="nav-icon" role="img" aria-label="Clock">🕒</span> Carbon Logs
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link" data-tab="challenges" role="tab" aria-selected="false" id="tab-challenges">
-                <span class="nav-icon">🏆</span> Challenges
+                <span class="nav-icon" role="img" aria-label="Trophy">🏆</span> Challenges
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link" data-tab="chat" role="tab" aria-selected="false" id="tab-chat">
-                <span class="nav-icon">💬</span> EcoBuddy Coach
+                <span class="nav-icon" role="img" aria-label="Speech bubble">💬</span> EcoBuddy Coach
               </a>
             </li>
           </ul>
 
           <!-- Sidebar Footer Utilities -->
           <div class="sidebar-footer">
-            <button id="theme-toggle" class="btn btn-secondary btn-full">🌙 Dark Mode</button>
-            <button id="reset-btn" class="btn btn-danger btn-full">🗑️ Reset Platform</button>
+            <button id="theme-toggle" class="btn btn-secondary btn-full"><span role="img" aria-label="Moon">🌙</span> Dark Mode</button>
+            <button id="reset-btn" class="btn btn-danger btn-full"><span role="img" aria-label="Trash can">🗑️</span> Reset Platform</button>
           </div>
         </nav>
 
@@ -150,6 +150,29 @@
                 <h3>Carbon Saved (CO₂e)</h3>
                 <p id="dash-saved-total" class="stat-value">0.0 kg</p>
                 <span class="stat-meta">From habits/challenges</span>
+              </div>
+            </div>
+
+            <!-- Global Carbon Target Comparison Widget -->
+            <div class="card alignment-card" style="margin-top: 1.5rem; padding: 1.25rem;">
+              <h3 style="margin-bottom: 0.75rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">🌍 Global Target Alignment</h3>
+              <div class="alignment-bar-wrapper" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500;">
+                  <span id="alignment-status-text">Comparing your footprint...</span>
+                  <span id="alignment-pct-text" style="font-weight: 700;">--</span>
+                </div>
+                <!-- Comparison visual slider -->
+                <div class="comparison-track" style="background-color: var(--border-color); height: 12px; border-radius: 6px; position: relative; overflow: hidden; border: 1px solid var(--border-color);">
+                  <!-- IPCC Target marker line -->
+                  <div style="position: absolute; left: 33.3%; top: 0; width: 3px; height: 100%; background-color: var(--secondary-color); z-index: 2;" title="IPCC Limit Target"></div>
+                  <!-- User footprint fill -->
+                  <div id="alignment-progress-fill" style="background-color: var(--primary-color); height: 100%; width: 0%; transition: width 0.6s ease;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">
+                  <span>0.0 Tons (Net Zero)</span>
+                  <span style="color: var(--secondary-color); font-weight: 600;">2.0 Tons (IPCC 1.5°C Limit)</span>
+                  <span>6.0+ Tons</span>
+                </div>
               </div>
             </div>
 
